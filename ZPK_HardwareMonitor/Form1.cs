@@ -7,50 +7,54 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using libCPUInfo;
+using libPrefMonCollector;
+using libPCInfo;
 
 namespace ZPK_HardwareMonitor
 {
     public partial class Form1 : Form
     {
-        cpuinfo Info;
+        PrefMonCollector PrefMonData;
+        PcInfo PcInfo;
         int i = 0;
+
+        List<double> cpuHistory = new List<double>();
+
         public Form1()
         {
             InitializeComponent();
-            Info = new cpuinfo();
-            Info.updateCpuTemp();
+            PrefMonData = new PrefMonCollector();
+            PcInfo = new PcInfo();
 
-            List<Temperature> tempki = Info.returnCpuTemp();
+            labelCpuName.Text = PcInfo.getCpuName();
 
-            textBoxCPUUsage.Text = tempki[0].CurrentValue.ToString();
-            textBoxCPUTemp.Text = tempki[0].InstanceName;
-        }
+            labelManufacturer.Text = PcInfo.getManufacturer();
+            labelModel.Text = PcInfo.getModel();
+            labelTotalMem.Text = PcInfo.getRamTotalMemMB().ToString() + " MB";
 
+            labelMaxRamGb.Text = Math.Round(PcInfo.getRamTotalMemMB() / 1024f) + " GB";
 
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
+            integratedGpu.Text = PcInfo.getMainGpuName();
+            dedicatedGpu.Text = PcInfo.getSecondGpuName();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            Info.updateCpuUsageAvg(timer1.Interval);
-            textBoxCPUUsage.Text = Info.getCpuAvgUsage().ToString() + "%";
+            textBoxCPUUsage.Text = Math.Round(PrefMonData.getCurrentCpuUsage(2), 2) + "%";
 
-            textBoxAvaiableRAM.Text = Info.getAvailableRAM() + " MB";
+            textBoxCPUTemp.Text = PrefMonData.getCurrentCpuTemp(2) + " °C";
 
-            Info.updateCpuTemp();
-            List<Temperature> tempki = Info.returnCpuTemp();
-            textBoxCPUTemp.Text = tempki[0].CurrentValue.ToString();
-            textBoxCPUTempName.Text = tempki[0].InstanceName;
+            textBoxAvaiableRAM.Text = PrefMonData.getCurrentRamFreeMem() + " MB";
+
+
+            graph1.drawGraph(PrefMonData.getCpuUsageHistory(), Color.White, Color.Black, Color.DodgerBlue, "usage");
+
+            graph2.drawGraph(PrefMonData.getCpuTempHistory(), Color.White, Color.Black, Color.DarkRed, "temp");
+
+            graph3.drawGraph(PrefMonData.getRamFreeMemHistory(), Color.White, Color.Black, Color.Purple, "ram", PcInfo.getRamTotalMemMB());
 
             textBoxTimer.Text = i.ToString();
             i++;
-
-            //textBox1.Text = performanceCounter1.NextValue().ToString();
-           // textBox2.Text = performanceCounter2.NextValue().ToString();
         }
     }
 }

@@ -1,0 +1,6 @@
+D:\POLITECHNIKA\Semestr 6\ZPK\libPrefMonCollector\bin\Debug\libPrefMonCollector.dll
+D:\POLITECHNIKA\Semestr 6\ZPK\libPrefMonCollector\bin\Debug\libPrefMonCollector.pdb
+D:\POLITECHNIKA\Semestr 6\ZPK\libPrefMonCollector\obj\Debug\libPrefMonCollector.csproj.AssemblyReference.cache
+D:\POLITECHNIKA\Semestr 6\ZPK\libPrefMonCollector\obj\Debug\libPrefMonCollector.csproj.CoreCompileInputs.cache
+D:\POLITECHNIKA\Semestr 6\ZPK\libPrefMonCollector\obj\Debug\libPrefMonCollector.dll
+D:\POLITECHNIKA\Semestr 6\ZPK\libPrefMonCollector\obj\Debug\libPrefMonCollector.pdb

@@ -1,8 +1,6 @@
 D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\bin\Debug\ZPK_HardwareMonitor.exe.config
 D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\bin\Debug\ZPK_HardwareMonitor.exe
 D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\bin\Debug\ZPK_HardwareMonitor.pdb
-D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\bin\Debug\libCPUInfo.dll
-D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\bin\Debug\libCPUInfo.pdb
 D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\obj\Debug\ZPK_HardwareMonitor.csproj.AssemblyReference.cache
 D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\obj\Debug\ZPK_HardwareMonitor.Form1.resources
 D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\obj\Debug\ZPK_HardwareMonitor.Properties.Resources.resources
@@ -11,3 +9,8 @@ D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\obj\Debug\ZPK_HardwareMonitor.
 D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\obj\Debug\ZPK_HardwareMonitor.csproj.CopyComplete
 D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\obj\Debug\ZPK_HardwareMonitor.exe
 D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\obj\Debug\ZPK_HardwareMonitor.pdb
+D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\obj\Debug\ZPK_HardwareMonitor.graph.resources
+D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\bin\Debug\libPCInfo.dll
+D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\bin\Debug\libPCInfo.pdb
+D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\bin\Debug\libPrefMonCollector.dll
+D:\POLITECHNIKA\Semestr 6\ZPK\ZPK_HardwareMonitor\bin\Debug\libPrefMonCollector.pdb
