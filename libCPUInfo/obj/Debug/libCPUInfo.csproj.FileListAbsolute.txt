@@ -1,6 +1,0 @@
-D:\POLITECHNIKA\Semestr 6\ZPK\libCPUInfo\bin\Debug\libCPUInfo.dll
-D:\POLITECHNIKA\Semestr 6\ZPK\libCPUInfo\bin\Debug\libCPUInfo.pdb
-D:\POLITECHNIKA\Semestr 6\ZPK\libCPUInfo\obj\Debug\libCPUInfo.csproj.AssemblyReference.cache
-D:\POLITECHNIKA\Semestr 6\ZPK\libCPUInfo\obj\Debug\libCPUInfo.csproj.CoreCompileInputs.cache
-D:\POLITECHNIKA\Semestr 6\ZPK\libCPUInfo\obj\Debug\libCPUInfo.dll
-D:\POLITECHNIKA\Semestr 6\ZPK\libCPUInfo\obj\Debug\libCPUInfo.pdb
