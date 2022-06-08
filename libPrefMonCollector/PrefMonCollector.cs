@@ -9,125 +9,163 @@ namespace libPrefMonCollector
 {
     public class PrefMonCollector
     {
-        private PerformanceCounter cpuCounter;
-        private PerformanceCounter cpuTempCounter;
-        private PerformanceCounter ramCounter;
+        // Zdefiniowanie zmiennych prywatnych
+        private PerformanceCounter _cpuCounter;
+        private PerformanceCounter _cpuTempCounter;
+        private PerformanceCounter _ramCounter;
 
-        private static Boolean collectorRunning = false;
+        private static Boolean _collectorRunning = false;
 
-        private List<double> cpuUsageHistory = new List<double>();
-        private List<double> cpuTempeHistory = new List<double>();
-        private List<double> ramFreeMemHistory = new List<double>();
+        private List<Double> _cpuUsageHistory = new List<Double>();
+        private List<Double> _cpuTempeHistory = new List<Double>();
+        private List<Double> _ramFreeMemHistory = new List<Double>();
 
+        private System.TimeSpan _updateInterval;
+        private UInt32 _cpuTempPrecision;
+        private UInt32 _cpuUsagePrecision;
+
+        // Konstruktor PrefMonCollector
         public PrefMonCollector()
         {
-            cpuCounter = new PerformanceCounter("Processor Information", "% Processor Utility", "_Total");
-            cpuTempCounter = new PerformanceCounter("Thermal Zone Information", "Temperature", @"\_TZ.TZ00");
-            ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+            // Inicjalizacja zmiennych prywatnych
+            _cpuCounter = new PerformanceCounter("Processor Information", "% Processor Utility", "_Total");
+            _cpuTempCounter = new PerformanceCounter("Thermal Zone Information", "Temperature", @"\_TZ.TZ00");
+            _ramCounter = new PerformanceCounter("Memory", "Available MBytes");
 
-            startTask();
+            SetUpdateInterval(500);
+            SetCpuTemparaturePrecision(0);
+            SetCpuUsagePrecision(0);
         }
-
+        
+        // Destruktor PrefMonCollector
         ~PrefMonCollector()
         {
-            stopTask();
+            StopDataCollectiong();
         }
 
-        public double getCurrentCpuUsage(double res)
+        // [Niefunkcjonalny] Ustawia częstotliwość aktualiacji danych
+        public void SetUpdateInterval(UInt32 ms)
         {
-            List<double> temp = cpuUsageHistory;
+            _updateInterval = new System.TimeSpan(0, 0, 0, 0, Convert.ToInt32(ms));
+        }
 
-            double sum = 0;
+        // [Funkcjonalny] Uruchamia w tle proces który zbiera statystyki (użycia procesora, temperatury, wolnej pamięci RAM),
+        // przechowuje maksymalnie 100 próbek
+        public void StartDataCollecting()
+        {
+            if (_collectorRunning == false)
+            {
+                _collectorRunning = true;
+                GatherData();
+            }
+        }
 
-            for (int i = temp.Count - 1; i > (temp.Count - 1 - res) && 0 < (temp.Count - 1 - res); i--)
+        // [Funkcjonalny] Zatrzymuje proces zbierający statystyki
+        public void StopDataCollectiong()
+        {
+            _collectorRunning = false;
+        }
+
+        // [Niefunkcjonalny] Ustawia precyzje do n miejsc po przecinku przy wyświetlaniu użycia procesora
+        public void SetCpuUsagePrecision(UInt32 n)
+        {
+            _cpuUsagePrecision = n;
+        }
+
+        // [Funkcjonalny] Zwraca aktualne średnie użycie procesora z ostatnich N próbek 
+        public Double GetCurrentCpuUsage(Double n)
+        {
+            List<Double> temp = _cpuUsageHistory;
+
+            Double sum = 0;
+
+            for (Int32 i = temp.Count - 1; i > (temp.Count - 1 - n) && 0 < (temp.Count - 1 - n); i--)
             {
                 sum += temp.ElementAt(i);
             }
 
-            return sum / res;
+            return Math.Round(sum / n, Convert.ToInt32(_cpuUsagePrecision));
         }
 
-        public List<double> getCpuUsageHistory()
+        // [Funkcjonalny] Zwraca tablice z historią użycia procesora dla ostatnich <=100 próbek
+        public List<Double> GetCpuUsageHistory()
         {
-            return cpuUsageHistory;
+            return _cpuUsageHistory;
         }
 
-        public double getCurrentCpuTemp(double res)
+        // [Niefunkcjonalny] Ustawia precyzje do n miejsc po przecinku przy wyświetlaniu temperatury procesora
+        public void SetCpuTemparaturePrecision(UInt32 n)
         {
-            List<double> temp = cpuTempeHistory;
+            _cpuTempPrecision = n;
+        }
 
-            double sum = 0;
+        // [Funkcjonalny] Zwraca aktualną średnią temperature procesora z ostatnich N próbek
+        public Double GetCurrentCpuTemp(Double n)
+        {
+            List<Double> temp = _cpuTempeHistory;
 
-            for (int i = temp.Count - 1; i > (temp.Count - 1 - res) && 0 < (temp.Count - 1 - res); i--)
+            Double sum = 0;
+
+            for (Int32 i = temp.Count - 1; i > (temp.Count - 1 - n) && 0 < (temp.Count - 1 - n); i--)
             {
                 sum += temp.ElementAt(i);
             }
 
-            return sum / res;
+            return Math.Round(sum / n, Convert.ToInt32(_cpuTempPrecision));
         }
 
-        public List<double> getCpuTempHistory()
+        // [Funkcjonalny] Zwraca tablice z historią temperatur procesora dla ostatnich <=100 próbek
+        public List<Double> GetCpuTempHistory()
         {
-            return cpuTempeHistory;
+            return _cpuTempeHistory;
         }
 
-        public double getCurrentRamFreeMem()
+        // [Funkcjonalny] Zwraca aktualną ilość wolnej pamięci RAM
+        public Double GetCurrentRamFreeMem()
         {
-            List<double> temp = ramFreeMemHistory;
+            List<Double> temp = _ramFreeMemHistory;
 
             return temp.ElementAt(temp.Count - 1);
         }
 
-        public List<double> getRamFreeMemHistory()
+        // [Funkcjonalny] Zwraca tablice z historią "wolnej ilości pamięci RAM" z ostatnich <=100 próbek
+        public List<Double> GetRamFreeMemHistory()
         {
-            return ramFreeMemHistory;
+            return _ramFreeMemHistory;
         }
 
         // Updates every 1000ms (The value associated with each performance counter is updated every 400 milliseconds.)
-        private async Task gatherData()
+        private async Task GatherData()
         {
-            while (collectorRunning)
+            while (_collectorRunning)
             {
                 // USAGE
-                var delayTask = Task.Delay(500);
-                if (cpuUsageHistory.Count == 100)
+                Task delayTask = Task.Delay(_updateInterval);
+                if (_cpuUsageHistory.Count == 100)
                 {
-                    cpuUsageHistory.RemoveAt(0);
+                    _cpuUsageHistory.RemoveAt(0);
                 }
-                double c = cpuCounter.NextValue();
-                cpuUsageHistory.Add(c);
-
+                Double c = _cpuCounter.NextValue();
+                _cpuUsageHistory.Add(c);
 
                 // TEMP
-                if (cpuTempeHistory.Count == 100)
+                if (_cpuTempeHistory.Count == 100)
                 {
-                    cpuTempeHistory.RemoveAt(0);
+                    _cpuTempeHistory.RemoveAt(0);
                 }
-                double t = (cpuTempCounter.NextValue() - 273.15);
-                cpuTempeHistory.Add(t);
-
+                Double t = (_cpuTempCounter.NextValue() - 273.15);
+                _cpuTempeHistory.Add(t);
 
                 // RAM
-                if (ramFreeMemHistory.Count == 100)
+                if (_ramFreeMemHistory.Count == 100)
                 {
-                    ramFreeMemHistory.RemoveAt(0);
+                    _ramFreeMemHistory.RemoveAt(0);
                 }
-                double r = ramCounter.NextValue();
-                ramFreeMemHistory.Add(r);
+                Double r = _ramCounter.NextValue();
+                _ramFreeMemHistory.Add(r);
 
                 await delayTask;
             }
-        }
-
-        private void startTask()
-        {
-            collectorRunning = true;
-            gatherData();
-        }
-
-        private void stopTask()
-        {
-            collectorRunning = false;
         }
     }
 }

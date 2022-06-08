@@ -9,73 +9,142 @@ namespace libPCInfo
 {
     public class PcInfo
     {
-        private String cpuName;
-        private String gpuName1;
-        private String gpuName2;
-        private UInt64 ramTotalMem = 0;
-        private int ramTotalMemMB = 0;
+        // Zdefiniowanie zmiennych prywatnych
+        private String _cpuName;
+        private String _gpuName1;
+        private String _gpuName2;
+        private UInt64 _ramTotalMemory;
+        private Int32 _ramUnitsType;
 
-        private String manufacturer = "Unknow";
-        private String partNumber = "Unknow";
+        private String _manufacturer;
+        private String _partNumber;
 
-        private List<String> ramBanks = new List<string>();
+        private List<String> _ramBanks;
 
+        // Konstruktor PcInfo
         public PcInfo()
         {
-            var cpuWMI = new ManagementObjectSearcher("select * from Win32_Processor").
-                Get().Cast<ManagementObject>().First();
-            cpuName = cpuWMI["Name"].ToString();
+            // Inicjalizacja zmiennych prywatnych
+            _ramTotalMemory = 0;
+            _manufacturer = "Unknow";
+            _partNumber = "Unknow";
+            _ramBanks = new List<String>();
+            _ramUnitsType = 0;
 
-            var ramWMI = new ManagementObjectSearcher("select * from Win32_PhysicalMemory").
-                Get().Cast<ManagementObject>();
+            String selectProcessor = "SELECT * from Win32_Processor";
+            String selectPhysicalMemory = "SELECT * from Win32_PhysicalMemory";
+            String selectVideoController = "SELECT * from Win32_VideoController";
 
-            foreach(var item in ramWMI)
+            ManagementObject cpuWMI = WmiQuery(selectProcessor).First();
+            _cpuName = cpuWMI["Name"].ToString();
+
+            IEnumerable<ManagementObject> ramWMI = WmiQuery(selectPhysicalMemory);
+            foreach(ManagementObject item in ramWMI)
             {
-                ramBanks.Add(item["Capacity"].ToString());
-                ramTotalMem += Convert.ToUInt64(item["Capacity"]);
+                _ramBanks.Add(item["Capacity"].ToString());
+                _ramTotalMemory += Convert.ToUInt64(item["Capacity"]);
 
-                manufacturer = item["Manufacturer"].ToString();
-                partNumber = item["PartNumber"].ToString();
+                _manufacturer = item["Manufacturer"].ToString();
+                _partNumber = item["PartNumber"].ToString();
             }
 
-            ramTotalMemMB = Convert.ToInt32((ramTotalMem/1024)/1024);
 
-            var gpu1WMI = new ManagementObjectSearcher("select * from Win32_VideoController").
-                Get().Cast<ManagementObject>().First();
-            var gpu2WMI = new ManagementObjectSearcher("select * from Win32_VideoController").
-                Get().Cast<ManagementObject>().Last();
-            gpuName1 = gpu1WMI["Name"].ToString();
-            gpuName2 = gpu2WMI["Name"].ToString();
+            ManagementObject gpu1WMI = WmiQuery(selectVideoController).First();
+            ManagementObject gpu2WMI = WmiQuery(selectVideoController).Last();
+
+
+            _gpuName1 = gpu1WMI["Name"].ToString();
+            _gpuName2 = gpu2WMI["Name"].ToString();
         }
 
-        public String getCpuName()
+        // [Funkcjonalny] Zwraca nazwę procesora
+        public String GetCpuName()
         {
-            return cpuName;
+            return _cpuName;
         }
 
-        public int getRamTotalMemMB()
+        // [Funkcjonalny] Zwraca całkowitą ilość zainstalowanego RAM-u
+        public UInt64 GetRamTotalMemory()
         {
-            return ramTotalMemMB;
+            switch (_ramUnitsType)
+            {
+                case 0:
+                    return _ramTotalMemory;
+                case 1:
+                    return _ramTotalMemory / 1024;
+                case 2:
+                    return _ramTotalMemory / 1048576;
+                case 3:
+                    return _ramTotalMemory / 1073741824;
+                case 4:
+                    return _ramTotalMemory / 1099511627776;
+                default:
+                    return _ramTotalMemory;
+            }
         }
 
-        public String getModel()
+        // [Niefunkcjonalny] Ustawia w jakich jednostkach będzia zwracana ilość pamięci RAM z funkcji GetRamTotalMemory()
+        public void SetDisplayedRamUnits(String unit)
         {
-            return partNumber;
+            if (String.Equals(unit, "b", StringComparison.OrdinalIgnoreCase) 
+                || String.Equals(unit, "byte", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(unit, "bytes", StringComparison.OrdinalIgnoreCase))
+            {
+                _ramUnitsType = 0;
+            } else if (String.Equals(unit, "kb", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(unit, "kilobyte", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(unit, "kilobytes", StringComparison.OrdinalIgnoreCase))
+            {
+                _ramUnitsType = 1;
+            }
+            else if (String.Equals(unit, "mb", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(unit, "megabyte", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(unit, "megabytes", StringComparison.OrdinalIgnoreCase))
+            {
+                _ramUnitsType = 2;
+            }
+            else if (String.Equals(unit, "gb", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(unit, "gigabyte", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(unit, "gigabytes", StringComparison.OrdinalIgnoreCase))
+            {
+                _ramUnitsType = 3;
+            }
+            else if (String.Equals(unit, "tb", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(unit, "terabyte", StringComparison.OrdinalIgnoreCase)
+                || String.Equals(unit, "terabytes", StringComparison.OrdinalIgnoreCase))
+            {
+                _ramUnitsType = 4;
+            }
         }
 
-        public String getManufacturer()
+        // [Funkcjonalny] Zwraca nazwę modelu zainstalowanej pamięci RAM
+        public String GetModel()
         {
-            return manufacturer;
+            return _partNumber;
         }
 
-        public String getMainGpuName()
+        // [Funkcjonalny] Zwraca nazwę producenta zainstalowanej pamięci RAM
+        public String GetManufacturer()
         {
-            return gpuName1;
+            return _manufacturer;
         }
 
-        public String getSecondGpuName()
+        // [Funkcjonalny] Zwraca nazwę zintegrowanej karty graficznej
+        public String GetMainGpuName()
         {
-            return gpuName2;
+            return _gpuName1;
+        }
+
+        // [Funkcjonalny] Zwraca nazwę dedykowanej karty graficznej
+        public String GetSecondGpuName()
+        {
+            return _gpuName2;
+        }
+
+        private IEnumerable<ManagementObject> WmiQuery(String query)
+        {
+            return new ManagementObjectSearcher(query).
+                Get().Cast<ManagementObject>();
         }
     }
 }

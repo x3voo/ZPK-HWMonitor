@@ -4,3 +4,9 @@ D:\POLITECHNIKA\Semestr 6\ZPK\libPCInfo\obj\Debug\libPCInfo.csproj.AssemblyRefer
 D:\POLITECHNIKA\Semestr 6\ZPK\libPCInfo\obj\Debug\libPCInfo.csproj.CoreCompileInputs.cache
 D:\POLITECHNIKA\Semestr 6\ZPK\libPCInfo\obj\Debug\libPCInfo.dll
 D:\POLITECHNIKA\Semestr 6\ZPK\libPCInfo\obj\Debug\libPCInfo.pdb
+D:\POLITECHNIKA\Semestr 6\ZPK\ZPK-HWMonitor\libPCInfo\bin\Debug\libPCInfo.dll
+D:\POLITECHNIKA\Semestr 6\ZPK\ZPK-HWMonitor\libPCInfo\bin\Debug\libPCInfo.pdb
+D:\POLITECHNIKA\Semestr 6\ZPK\ZPK-HWMonitor\libPCInfo\obj\Debug\libPCInfo.csproj.AssemblyReference.cache
+D:\POLITECHNIKA\Semestr 6\ZPK\ZPK-HWMonitor\libPCInfo\obj\Debug\libPCInfo.csproj.CoreCompileInputs.cache
+D:\POLITECHNIKA\Semestr 6\ZPK\ZPK-HWMonitor\libPCInfo\obj\Debug\libPCInfo.dll
+D:\POLITECHNIKA\Semestr 6\ZPK\ZPK-HWMonitor\libPCInfo\obj\Debug\libPCInfo.pdb
