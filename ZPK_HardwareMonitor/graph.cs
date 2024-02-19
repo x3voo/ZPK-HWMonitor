@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ZPK_HardwareMonitor
@@ -18,6 +13,10 @@ namespace ZPK_HardwareMonitor
         private Color _bgColor;
         private Color _borderColor;
 
+        private Graphics _graphics;
+        private Graphics _graphicsBuffer;
+        private Bitmap _bitmapBuffer;
+
         public Graph()
         {
             InitializeComponent();
@@ -26,6 +25,16 @@ namespace ZPK_HardwareMonitor
             _pointColor = Color.Black;
             _bgColor = Color.White;
             _borderColor = Color.Black;
+
+            InitializeGraphicsBuffer();
+        }
+
+        private void InitializeGraphicsBuffer()
+        {
+            _graphics = this.CreateGraphics();
+            _graphics.Clear(_bgColor);
+            _bitmapBuffer = new Bitmap(this.Width, this.Height);
+            _graphicsBuffer = Graphics.FromImage(_bitmapBuffer);
         }
 
         // [Niefunkcjonalny] Zmiana koloru próbek
@@ -56,7 +65,7 @@ namespace ZPK_HardwareMonitor
             List<Int32> normalizedData = NormalizeDataPoints(data, type, numMax); //~0ms
 
             // Rysowanie tła
-            this.CreateGraphics().Clear(_bgColor);
+            _graphicsBuffer.Clear(_bgColor);
 
             // Rysowanie próbek
             for (Int32 i = 0; i <= 99; i++)
@@ -72,15 +81,17 @@ namespace ZPK_HardwareMonitor
                     b = new Point(i * 2, 50);
                 }
 
-                this.CreateGraphics().DrawLine(new Pen(_pointColor), a, b);
+                _graphicsBuffer.DrawLine(new Pen(_pointColor), a, b);
             }
 
             // Rysowanie ramki
-            this.CreateGraphics().DrawLine(new Pen(_borderColor, 1), new Point(0, 0), new Point(200, 0));
-            this.CreateGraphics().DrawLine(new Pen(_borderColor, 1), new Point(200, 0), new Point(200, 50));
+            _graphicsBuffer.DrawLine(new Pen(_borderColor, 1), new Point(0, 0), new Point(200, 0));
+            _graphicsBuffer.DrawLine(new Pen(_borderColor, 1), new Point(200, 0), new Point(200, 50));
 
-            this.CreateGraphics().DrawLine(new Pen(_borderColor, 1), new Point(0, 0), new Point(0, 50));
-            this.CreateGraphics().DrawLine(new Pen(_borderColor, 1), new Point(0, 50), new Point(200, 50));
+            _graphicsBuffer.DrawLine(new Pen(_borderColor, 1), new Point(0, 0), new Point(0, 50));
+            _graphicsBuffer.DrawLine(new Pen(_borderColor, 1), new Point(0, 50), new Point(200, 50));
+
+            _graphics.DrawImage(_bitmapBuffer, 0, 0);
         }
 
         private List<int> NormalizeDataPoints(List<Double> data, String type, UInt64 numMax = 0)
