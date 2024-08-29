@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using libPrefMonCollector;
 using libPCInfo;
@@ -17,8 +12,6 @@ namespace ZPK_HardwareMonitor
         private PrefMonCollector PrefMonData;
         private PcInfo PcInfo;
         private Int32 i = 0;
-
-        private List<double> cpuHistory = new List<double>();
 
         public FormMain()
         {
@@ -75,6 +68,7 @@ namespace ZPK_HardwareMonitor
 
 
             TimerTextBox = i.ToString(); i++;
+            buttonPinWindow.Focus();
         }
 
         private String TimerTextBox {
@@ -421,6 +415,22 @@ namespace ZPK_HardwareMonitor
             set
             {
                 labelUptime.Text = value;
+            }
+        }
+
+        private void buttonPinWindow_Click(object sender, EventArgs e)
+        {
+            bool isTopMost = !this.TopMost;
+            this.TopMost = isTopMost;
+            if (this.TopMost)
+            {
+                buttonPinWindow.Text = "📌 Unpin Window";
+                this.Opacity = 0.88;
+            }
+            else
+            {
+                buttonPinWindow.Text = "📌 Pin Window";
+                this.Opacity = 1;
             }
         }
     }

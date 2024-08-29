@@ -59,6 +59,7 @@ namespace ZPK_HardwareMonitor
             this.integratedGpu = new System.Windows.Forms.TextBox();
             this.labelIntegratedGpu = new System.Windows.Forms.Label();
             this.labelUptime = new System.Windows.Forms.Label();
+            this.buttonPinWindow = new System.Windows.Forms.Button();
             this.GraphRAM = new ZPK_HardwareMonitor.Graph();
             this.GraphCPUTemp = new ZPK_HardwareMonitor.Graph();
             this.GraphCPUUsage = new ZPK_HardwareMonitor.Graph();
@@ -87,7 +88,7 @@ namespace ZPK_HardwareMonitor
             // 
             this.textBoxTimer.Location = new System.Drawing.Point(70, 300);
             this.textBoxTimer.Name = "textBoxTimer";
-            this.textBoxTimer.Size = new System.Drawing.Size(73, 22);
+            this.textBoxTimer.Size = new System.Drawing.Size(86, 22);
             this.textBoxTimer.TabIndex = 3;
             // 
             // textBoxAvaiableRAM
@@ -350,6 +351,16 @@ namespace ZPK_HardwareMonitor
             this.labelUptime.TabIndex = 16;
             this.labelUptime.Text = "Uptime";
             // 
+            // buttonPinWindow
+            // 
+            this.buttonPinWindow.Location = new System.Drawing.Point(12, 265);
+            this.buttonPinWindow.Name = "buttonPinWindow";
+            this.buttonPinWindow.Size = new System.Drawing.Size(144, 29);
+            this.buttonPinWindow.TabIndex = 17;
+            this.buttonPinWindow.Text = "📌 Pin Window";
+            this.buttonPinWindow.UseVisualStyleBackColor = true;
+            this.buttonPinWindow.Click += new System.EventHandler(this.buttonPinWindow_Click);
+            // 
             // GraphRAM
             // 
             this.GraphRAM.Location = new System.Drawing.Point(67, 43);
@@ -376,12 +387,16 @@ namespace ZPK_HardwareMonitor
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(722, 330);
+            this.Controls.Add(this.buttonPinWindow);
             this.Controls.Add(this.labelUptime);
             this.Controls.Add(this.groupBoxGpu);
             this.Controls.Add(this.groupBoxRam);
             this.Controls.Add(this.groupBoxCpu);
             this.Controls.Add(this.textBoxTimer);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "FormMain";
+            this.ShowIcon = false;
             this.Text = "Hardware Monitor";
             this.groupBoxCpu.ResumeLayout(false);
             this.groupBoxCpu.PerformLayout();
@@ -428,6 +443,7 @@ namespace ZPK_HardwareMonitor
         private System.Windows.Forms.Label labelIntegratedGpu;
         private System.Windows.Forms.Label labelMaxRam;
         private System.Windows.Forms.Label labelMinRam;
+        private System.Windows.Forms.Button buttonPinWindow;
     }
 }
 
